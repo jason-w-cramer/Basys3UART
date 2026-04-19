@@ -22,11 +22,11 @@
 
 module transmit_dataflow_tb;
     logic [6:0] Din;
-    logic shift, load, clk;
+    logic shift, load, clk, clrData;
     logic serialOut;
     
     transmit_dataflow DUT (
-        .Din(Din), .shift(shift), .load(load), .clk(clk), .serialOut(serialOut)
+        .Din(Din), .shift(shift), .load(load), .clk(clk), .serialOut(serialOut), .clrData(clrData)
     );
     
     initial clk = 0;
@@ -34,10 +34,11 @@ module transmit_dataflow_tb;
     
     initial
     begin
-        Din = 6'b111111;
+        clrData = 1;
         shift = 0;
         load = 1;
         #10;
+        clrData = 0;
         load = 0;
         shift = 1;
         #30;
