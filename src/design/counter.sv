@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 04/19/2026 03:36:41 PM
+// Create Date: 04/19/2026 03:50:58 PM
 // Design Name: 
-// Module Name: tim
+// Module Name: counter
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,14 +20,13 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module tim #(
-    parameter COUNT_MAX = 10_416 // Baud rate of 9600 when clk frequency is 100MHz
+module counter #(
+    parameter COUNT_MAX = 8 // Need to shift 8 times for 7 bits with start and stop bit (stop bit and idle bit are the same, so no need to shift) 
     )(
-        input logic clrTimer,
-        input logic clk,
-        output logic timerDone
+        input logic clk, incCnt, clrCnt,
+        output logic cntDone
     );
-        
+    
     // Make timer wide enough to fit COUNT_MAX
     logic [$clog2(COUNT_MAX)-1:0] count, nextCount;
     
@@ -36,17 +35,19 @@ module tim #(
     begin
         // Default values
         nextCount = count;
-        timerDone = 0;
+        cntDone = 0;
         
-        if (clrTimer)
+        if (clrCnt)
             nextCount = 0;
         else
         begin
             if (count == COUNT_MAX - 1)
             begin
-                timerDone = 1;
+                cntDone = 1;
                 nextCount = count;
             end
+            else if (~incCnt)
+                nextCount = count;
             else
                 nextCount = count + 1;  
         end
@@ -57,3 +58,4 @@ module tim #(
         count <= nextCount;
     
 endmodule
+
