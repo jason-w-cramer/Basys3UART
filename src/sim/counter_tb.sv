@@ -41,7 +41,6 @@ module counter_tb;
         #50;
         incCnt = 1;
         #100;
-        $finish;
-            
+        $finish;      
     end
 endmodule
