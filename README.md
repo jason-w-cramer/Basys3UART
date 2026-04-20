@@ -15,5 +15,5 @@ For my design I chose the parameters below.
 - 9600 baud rate
 
 
-I have usually found that a top down design approach with a bottom up implementation works the bext for me. Because of this I started with a very high level block diagram. 
-[Diagram](README_pictures/UART_module.pdf)
+I have usually found that a top down design approach with a bottom up implementation works the best for me. Because of this I started with a very high level block diagram. 
+![Diagram](README_pictures/UARTmodule.png)
