@@ -67,7 +67,7 @@ module transmitter_statemachine(
                 if (timDone)
                 begin
                     ns = sft;
-                    incCnt = 1; // Increase shift counter (how many data bits have we sent)
+                    incCnt = 1;     // Increase shift counter (how many data bits have we sent)
                 end
                 else
                     ns = wt;
@@ -76,8 +76,8 @@ module transmitter_statemachine(
             // Shift state, enable shift, clear timer for next shift wait time
             sft:
             begin
-                clrTim = 1;
-                shift = 1;
+                clrTim = 1;     // Reset timer that calculates when to send next bit
+                shift = 1;      // Shift output
                 if (~cntDone)
                     ns = wt;
                 else

@@ -42,10 +42,10 @@ module transmitter_top_tb;
     initial
     begin
         clr = 1;
-        data = 7'b1010101;
+        data = 7'b0001111;
         req = 0;
         #50;
-        $monitor("time=%0t clrData=%0b", $time, DUT.clrData);
+        $monitor("time=%0t serialOut=%0b", $time, serialOut);
         clr = 0;
         req = 1;
         #100_000_000;
@@ -53,4 +53,5 @@ module transmitter_top_tb;
         #20;
         $finish;
     end
+
 endmodule

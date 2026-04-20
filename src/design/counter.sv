@@ -21,7 +21,7 @@
 
 
 module counter #(
-    parameter COUNT_MAX = 8 // Need to shift 8 times for 7 bits with start and stop bit (stop bit and idle bit are the same, so no need to shift) 
+    parameter COUNT_MAX = 10 // For 7 bits with a start, stop, and parity bit
     )(
         input logic clk, incCnt, clrCnt,
         output logic cntDone
