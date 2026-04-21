@@ -1,4 +1,7 @@
 # Custom UART module
+## Video Demonstration
+https://youtu.be/bmM2D0RvaSs
+
 ## Goals
 - Learn SystemVerilog
 - Learn to program state machines
