@@ -1,6 +1,6 @@
 # Custom UART module
 ## Video Demonstration
-https://youtu.be/bmM2D0RvaSs
+https://youtu.be/bmM2D0RvaSs (Project is work in progress, current video is transmitter only, receiver coming soon)
 
 ## Goals
 - Learn SystemVerilog
