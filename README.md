@@ -9,14 +9,24 @@ https://youtu.be/bmM2D0RvaSs
 - Get working transmitter and reciever implemented on Basys 3 development board
 - Make sure timing is precise (not just close enough)
 
+## What is UART
+I just want to start by giving an overview of UART so my project can be better understood. If you already know UART you can skip this section. 
+
+Universal Asynchronous Receive Transmit (UART) is a communication protocol. It is a standard for communication so that any devices with UART capabilities can talk to each other. UART devices will have a receive pin for receiving data, and a transmit pin for sending data. One devices transmit pin will be wired to the others receive pin and vice versa. Logic for UART is very straightfoward, high voltages will represent a 1 being sent, and low voltages will represent a 0 being sent. UART usually can be configured to send data in 8 bit or 7 bit chunks. While not sending data, the device idle the line at a high voltage, to signal when a transmission is going to occur it sends a start bit, which is a 0. This lets the receiving device know it is time to listen for data. It will then send the data. It also ends with a 1 as a stop bit. Since the stop bit is the same voltage as idling, the device will keep the line at a high voltage until the next transmission. There is one more optional bit of data. Some devices will have error checking in the form of an odd or even parity bit. Odd parity would send a 0 when the data has an odd number of 1s, and a 1 when the data has an even number of 1s. The effect is that if we exclude the start and stop bits, the total number of 1s in the data being sent will always be odd. If odd parity is set up and a device receives an even number of 1s, we know that the data is corrupted. This won't always happen when data is corrupted, but it can help identify some errors. Even parity is the opposite of odd parity where we set the bit so the data always has an even number of 1s. Some devices will not use a parity bit, and some will use 2 stop bits. I have also seen some devices which support 9 bits of data as well. We also have a baud rate. Each device will need to have the same baud rate. The baud rate is how many bits/sec we will send in a transmission. 
+
 ## Design
-To start the design we first have to know how UART works. UART is a serial communication protocol. Each device has either a transmitter, a receiver, or both. The direction of data only goes one way on a transmission line. Each device needs its own transmission line to send data. Each device also needs to be set up with the same baud rate, this is because there is no clock line so the receiving device needs to know exactly when to sample the data. Each transmission starts with a start bit, which is just a 0. A UART line idles at a 1, or high voltage. We know data is being sent when the start bit gets sent. We then listen for a specified number of bits. The start bit is followed by the data bits, the information we want to send, starting with the LSB first. We then have an optional parity bit (which can be odd or even). The transmission then ends with the stop bit, which is a 1, or high voltage, and then the line will idle again until the next transmission.
 
 For my design I chose the parameters below. 
 - 7 data bits
 - odd parity
 - 9600 baud rate
 
-
-I have usually found that a top down design approach with a bottom up implementation works the best for me. Because of this I started with a very high level block diagram. 
+### Top diagram
+I have usually found that a top down design approach with a bottom up implementation/coding works the best for me. Because of this I started with a very high level block diagram. 
 ![Diagram](README_pictures/UARTmodule.png)
+
+ This design is fairly straighfoward. This design was copied from Designing Digital Systems With SystemVerilog(v2.0) by Brent E. Nelson, and a lot of the design is heavily inspired by the same book, although I have made my own changes based on personnal preference. I have a seperate modules for both the transmitter and the receiver. Each module communicates with the host (device using the UART) via some sort of handshake. It also has the data we want to send going into the transmitter, which will then be converted to our serial signal, coming out of the serial out. The receiver is fairly similar but it receives data from serial in and sends it to the host. 
+
+ ### Transmitter
+ I started designing and implementing the transmitter first because I beleive it will be the easiest to debug. We can break the transmitter down into a control block and a datapath. The datapath knows nothing about the system, it only does with the data what it is told. The controller will be handling all of the logic for actually sending the data. In my design I chose to use shift registers for the datapath because it made the most intuitive sense to me. We will need the signals to load the input data into the registers, a shift signal to tell the registers when to shift, and a clrData bit for initializing the output with a high voltage. 
+ ![Diagram](README_pictures/Transmitter.png)
