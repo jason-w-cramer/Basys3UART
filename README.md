@@ -39,6 +39,7 @@ The controller I designed has 3 main blocks, a state machine, a timer, and a cou
 
 ### Transmitter Controller State Machine
 ![Diagram](README_pictures/Transmitter_State_Machine.png)
+
 Transmitter state machine ended up being slightly different from the one I designed (added a load state to rule out my mealy output being a bug, etc..) but this state machine is the one I used as reference while designing and should give a good idea of how it is intended to work. This project is still a work in progress so I may update with a new diagram showing my current logic when finished. (A message for future me) UPDATE THIS SECTION.
 
 ### Design Charts not Included
