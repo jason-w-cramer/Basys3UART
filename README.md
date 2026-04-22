@@ -36,3 +36,12 @@ I started designing and implementing the transmitter first because I believe it 
 ### Transmitter Controller
 The controller I designed has 3 main blocks, a state machine, a timer, and a counter. The state machine will handle the logic of communicating with the host and sending the bits. The timer keeps track of how much time has passed since the start of the current bit, and the counter counts how many bits we have already sent. 
 ![Diagram](README_pictures/Controller.png)
+
+### Transmitter Controller State Machine
+(WIP)
+
+### Design Charts not Included
+Because the designs for the dataflow, timer, and counter are fairly simple and straightforward, detailed diagrams were not made or included. 
+
+### Testbench
+Testbench code was written to test every module except timer, as I have already used this specific timer in multiple projects. 
