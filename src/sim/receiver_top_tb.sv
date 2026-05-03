@@ -38,6 +38,30 @@ module receiver_top_tb;
     always #5 clk = ~clk;
     initial
     begin
-        
+        $monitor("Time=%0t | shift=%b", $time, DUT.shift);
+        ack = 0;
+        clrReceive = 1;
+        #10;
+        clrReceive = 0;
+        serialIn = 0;
+        #104170;
+        serialIn = 1;
+        #104170;
+        serialIn = 0;
+        #104170;
+        serialIn = 1;
+        #104170;
+        serialIn = 1;
+        #104170;
+        serialIn = 0;
+        #104170;
+        serialIn = 0;
+        #104170;
+        serialIn = 0;
+        #104170;
+        serialIn = 0;
+        #104170;
+        serialIn = 1;
+
     end
 endmodule

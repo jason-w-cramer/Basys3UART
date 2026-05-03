@@ -56,7 +56,7 @@ module receiver_statemachine(
             // Wait Half state, here we wait half of period so we can sample at the middle of the data
             WAIT_HALF:
             begin
-                if (timePassed == 5208)     // 10417/2 = 5208.5
+                if (timePassed == 5207)     // 10417/2 = 5208.5
                 begin
                     ns = WAIT_FULL;
                     clrTim = 1;             // Mealy output, clear on way to wait full state
