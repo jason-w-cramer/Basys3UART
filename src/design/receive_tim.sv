@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module tim #(
+module receive_tim #(
     parameter COUNT_MAX = 10_416 // Baud rate of 9600 when clk frequency is 100MHz
     )(
         input logic clrTimer,
