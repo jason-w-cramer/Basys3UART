@@ -22,37 +22,60 @@
 
 module top(
         input logic [6:0] sw,
-        input logic clk,
-        output logic UART
+        input logic clk, UARTrx,
+        output logic UARTtx,
+        output logic [7:0] led
     );
+    
+    logic clr;
+    
     // ===================================================
-    // Double latching input to avoid metastability
+    // Double latching inputs to avoid metastability
     // ===================================================
     logic[6:0] data, nextData;
+    logic serialIn, nextSerial;
     always_ff @(posedge clk)
     begin
+        // Switches
         data <= nextData;
         nextData <= sw;
+        
+        // UART Rx input
+        nextSerial <= UARTrx;
+        serialIn <= nextSerial;
     end   
     
     
     // =====================================================
     // Declare transmitter and link signals
     // =====================================================
-    logic clr, req, ack;
+    logic reqTx, ackTx;
     
     transmitter_top tm( 
             .data(data), 
             .clk(clk), 
-            .serialOut(UART), 
-            .ack(ack), 
+            .serialOut(UARTtx), 
+            .ack(ackTx), 
             .clr(clr), 
-            .req(req)
+            .req(reqTx)
         ); 
         
+    // =====================================================
+    // Declare receiver and link signals
+    // =====================================================
+    logic reqRx, ackRx;
+    receiver_top rm(
+        .ack(ackRx), 
+        .clk(clk), 
+        .clrReceive(clr), 
+        .serialIn(serialIn),
+        .req(reqRx), 
+        .readErr(led[7]), 
+        .data(led[6:0])
+    );
     
-    // =========================================================
-    // Assert clr to clear transmitter state before starting
+    // ==========================================================
+    // Assert clr to clear transmitter/receiver state before starting
     // ==========================================================
     logic [3:0] reset_cnt = 0;
     always_ff @(posedge clk) begin
@@ -66,7 +89,7 @@ module top(
     
     
     // ============================================================
-    // Basic statemachine to handle setting and clearing req bit 
+    // Basic statemachine to handle setting and clearing reqTx bit 
     // ============================================================  
     typedef enum logic [1:0] {
         IDLE,
@@ -81,18 +104,18 @@ module top(
     always_ff @(posedge clk) begin
         if (clr) begin
             state   <= IDLE;
-            req     <= 0;
+            reqTx   <= 0;
             gap_cnt <= 0;
         end else begin
         case (state)
             IDLE: begin
-                req   <= 1;
+                reqTx <= 1;
                 state <= WAIT_ACK;
             end
     
             WAIT_ACK: begin
-                if (ack) begin
-                    req     <= 0;
+                if (ackTx) begin
+                    reqTx   <= 0;
                     gap_cnt <= 0;
                     state   <= GAP;
                 end
@@ -109,4 +132,21 @@ module top(
         endcase
         end
     end  
+    
+    // ============================================================
+    // Basic logic to handle setting and clearing ackRx bit 
+    // ============================================================ 
+    always_ff @(posedge clk) begin
+        if (clr) begin
+            ackRx <= 1'b0;
+        end else begin
+            // Assert ack when request is seen
+            if (reqRx)
+                ackRx <= 1'b1;
+            // Deassert ack once request is released
+            else
+                ackRx <= 1'b0;
+        end
+    end
+
 endmodule
