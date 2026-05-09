@@ -64,14 +64,15 @@ module top(
     // Declare receiver and link signals
     // =====================================================
     logic reqRx, ackRx;
+    logic [7:0] rxIn;
     receiver_top rm(
         .ack(ackRx), 
         .clk(clk), 
         .clrReceive(clr), 
         .serialIn(serialIn),
         .req(reqRx), 
-        .readErr(led[7]), 
-        .data(led[6:0])
+        .readErr(rxIn[7]), 
+        .data(rxIn[6:0])
     );
     
     // ==========================================================
@@ -134,19 +135,23 @@ module top(
     end  
     
     // ============================================================
-    // Basic logic to handle setting and clearing ackRx bit 
+    // Basic logic to handle setting and clearing ackRx bit/setting LEDs
     // ============================================================ 
     always_ff @(posedge clk) begin
         if (clr) begin
             ackRx <= 1'b0;
+            led   <= 8'b0;
         end else begin
             // Assert ack when request is seen
             if (reqRx)
+            begin
                 ackRx <= 1'b1;
+                led <= rxIn;
+            end
             // Deassert ack once request is released
             else
                 ackRx <= 1'b0;
         end
     end
-
+  
 endmodule
