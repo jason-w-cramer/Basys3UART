@@ -29,7 +29,7 @@ I have usually found that a top down design approach with a bottom up implementa
 
  This design is fairly straighfoward. This design was copied from Designing Digital Systems With SystemVerilog(v2.0) by Brent E. Nelson, and a lot of the design is heavily inspired by the same book, although I have made my own changes based on personnal preference. I have a seperate modules for both the transmitter and the receiver. Each module communicates with the host (device using the UART) via some sort of handshake. It also has the data we want to send going into the transmitter, which will then be converted to our serial signal, coming out of the serial out. The receiver is fairly similar but it receives data from serial in and sends it to the host. 
 
- ### Transmitter
+### Transmitter
 I started designing and implementing the transmitter first because I believe it will be the easiest to debug. We can break the transmitter down into a control block and a datapath. The datapath knows nothing about the system, it only does with the data what it is told. The controller will be handling all of the logic for actually sending the data. In my design I chose to use shift registers for the datapath because it made the most intuitive sense to me. We will need the signals to load the input data into the registers, a shift signal to tell the registers when to shift, and a clrData bit for initializing the output with a high voltage. It was also at this point I picked the handshake for the system. The host will assert a 1 on the request line (req) when it is ready to send data. The data must be stable before asserting req. The system will then send the data, and return acknowledge (ack) when the data is finished being sent. The host can then deassert req whenever. When req is deasserted, ack can then be deasserted, letting the host know we are ready to send more data. 
  ![Diagram](README_pictures/Transmitter.png)
  
@@ -40,7 +40,20 @@ The controller I designed has 3 main blocks, a state machine, a timer, and a cou
 ### Transmitter Controller State Machine
 ![Diagram](README_pictures/Transmitter_State_Machine.png)
 
-Transmitter state machine ended up being slightly different from the one I designed (added a load state to rule out my mealy output being a bug, etc..) but this state machine is the one I used as reference while designing and should give a good idea of how it is intended to work. This project is still a work in progress so I may update with a new diagram showing my current logic when finished. (A message for future me) UPDATE THIS SECTION.
+Transmitter state machine ended up being slightly different from the one I designed (added a load state to rule out my mealy output being a bug, etc..) but this state machine is the one I used as reference while designing and should give a good idea of how it is intended to work.
+
+### Receiver
+The receiver is very similar to the transmitter. A few differences to note is that the data now comes in, and there is an error checker. This flag goes high when the data received is not in a format we expect (wrong parity, no stop bit). You might have also noticed that now the receiver sends the request when it gets data and the host sends the acknowledge when it reads it. 
+ ![Diagram](README_pictures/Receiver.png)
+ 
+### Receiver Controller
+The Controller is also very similar to the transmitter. Some differences to note are that the timer now gives the state machine the full time rather than a done flag. This is because we need to wait 1.5 cycles before sampling so we can get the center of the first data bit. This helps us make sure that even if the timing between devices is slightly off we will still read the data correctly. 
+![Diagram](README_pictures/Receiver_Controller.png)
+
+### Receiver Controller State Machine
+![Diagram](README_pictures/Receiver_State_Machine.png)
+
+This is the design I based my receiver off of. I just copied the paper version to a cleaner digital version.
 
 ### Design Charts not Included
 Because the designs for the dataflow, timer, and counter are fairly simple and straightforward, detailed diagrams were not made or included. 
