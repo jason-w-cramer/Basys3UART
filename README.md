@@ -2,7 +2,9 @@
 ## Video Demonstration
 Transmitter Testing: https://youtu.be/bmM2D0RvaSs 
 
-Receiver Testing: Coming Soon
+Receiver Testing: https://youtu.be/fD8gBr19wiM
+
+(In the testing of the receiver I said LED 6 was the error checking bit but it was LED 7, 0-6 were the data bits
 
 ## Goals
 - Learn SystemVerilog
