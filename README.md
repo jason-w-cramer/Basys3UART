@@ -15,9 +15,9 @@ Receiver Testing: https://youtu.be/fD8gBr19wiM
 
 ## How to recreate project
 1. Clone repository
-2. Open vivado
+2. Open Vivado
 3. In the tcl console navigate to the project directory
-4. Write "source build.tcl" in the TCL console
+4. Write "source build.tcl" in the tcl console
 
 ## What is UART
 I just want to start by giving an overview of UART so my project can be better understood. If you already know UART you can skip this section. 
