@@ -13,7 +13,7 @@ Receiver Testing: https://youtu.be/fD8gBr19wiM
 - Get working transmitter and reciever implemented on Basys 3 development board
 - Make sure timing is precise (not just close enough)
 
-## How to recreate project
+## How to Recreate Project
 1. Clone repository
 2. Open Vivado
 3. In the tcl console navigate to the project directory
@@ -70,3 +70,10 @@ Because the designs for the dataflow, timer, and counter are fairly simple and s
 
 ### Testbench
 Testbench code was written to test every module except timer, as I have already used this specific timer in multiple projects. 
+
+### Lessons Learned
+
+1. Specify top sim source when running a test bench
+2. Disable checkpoints and delete dcp files before writing a tcl script to recreate project
+3. DCP files need to be deleted with remove_files[get_files *.dcp]
+4. Because of how latches work, when conditions for a state are met in a statemachine, you will go into that state on the next clock cycle. This can cause timing issues if not considered. 
