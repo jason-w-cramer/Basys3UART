@@ -76,4 +76,5 @@ Testbench code was written to test every module except timer, as I have already 
 1. Specify top sim source when running a test bench
 2. Disable checkpoints and delete dcp files before writing a tcl script to recreate project
 3. DCP files need to be deleted with remove_files[get_files *.dcp]
-4. Because of how latches work, when conditions for a state are met in a statemachine, you will go into that state on the next clock cycle. This can cause timing issues if not considered. 
+4. Because of how latches work, when conditions for a state are met in a statemachine, you will go into that state on the next clock cycle. This can cause timing issues if not considered.
+5. It seems to be that past tense is thought of as bad practice in commit messages. This doesn't make much sense to me yet but I will try to change my messages in the future. Most of the messages for this project are in past tense. 
