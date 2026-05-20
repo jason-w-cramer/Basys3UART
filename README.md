@@ -13,6 +13,12 @@ Receiver Testing: https://youtu.be/fD8gBr19wiM
 - Get working transmitter and reciever implemented on Basys 3 development board
 - Make sure timing is precise (not just close enough)
 
+## How to recreate project
+1. Clone repository
+2. Open vivado
+3. In the tcl console navigate to the project directory
+4. Write "source build.tcl" in the TCL console
+
 ## What is UART
 I just want to start by giving an overview of UART so my project can be better understood. If you already know UART you can skip this section. 
 
